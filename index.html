@@ -7,60 +7,58 @@
 <style>
 body{
   background:#ffc0cb;
+  font-family:Arial,sans-serif;
   text-align:center;
-  font-family:'Segoe UI',sans-serif;
-  overflow:hidden;
   margin:0;
-  padding-top:40px;
+  height:100vh;
+  display:flex;
+  flex-direction:column;
+  justify-content:flex-start;
+  align-items:center;
 }
 
 h2{
+  margin-top:30px;
   color:#8b004f;
 }
 
 button{
-  padding:12px 26px;
+  padding:12px 28px;
   font-size:18px;
-  margin:12px;
+  margin:10px;
   border:none;
   border-radius:8px;
-  cursor:pointer;
 }
 
-#yesBtn{ background:#ff4d88; color:white; }
-#noBtn{ background:#eee; position:relative; }
+#yesBtn{background:#ff4d88;color:white;}
+#noBtn{background:#eee;position:relative;}
 
 #msg{
+  min-height:50px;
   font-size:20px;
   color:#7a003c;
-  min-height:60px;
-  margin-top:10px;
+}
+
+#photoBox{
+  display:none;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  margin-top:20px;
 }
 
 #photo{
   width:280px;
   border-radius:20px;
-  display:none;
-  margin:25px auto;
-  animation:fadeIn 2s ease;
 }
 
-@keyframes fadeIn{
-  from{opacity:0; transform:scale(0.8);}
-  to{opacity:1; transform:scale(1);}
+#loveText{
+  font-size:22px;
+  color:#b3005e;
+  margin-top:10px;
 }
 
-/* floating hearts */
-.heart{
-  position:fixed;
-  bottom:-20px;
-  font-size:24px;
-  animation:floatUp 6s linear infinite;
-}
-@keyframes floatUp{
-  0%{transform:translateY(0); opacity:1;}
-  100%{transform:translateY(-100vh); opacity:0;}
-}
+audio{display:none;}
 </style>
 </head>
 
@@ -68,12 +66,15 @@ button{
 
 <h2>Will you be my Valentine? ❤️</h2>
 
-<div id="msg">Tap anywhere to start the music 💕</div>
+<div id="msg">Touch anywhere once 💕</div>
 
 <button id="yesBtn" onclick="yesClicked()">YES 💖</button>
 <button id="noBtn" onclick="noClicked()">NO 😅</button>
 
-<img id="photo" src="her.jpeg">
+<div id="photoBox">
+  <img id="photo" src="her.jpeg">
+  <div id="loveText">I love you Sneka 💕</div>
+</div>
 
 <audio id="music" src="music.mpeg" loop></audio>
 <audio id="voice" src="voice.mpeg"></audio>
@@ -81,32 +82,30 @@ button{
 <script>
 const music=document.getElementById("music");
 const voice=document.getElementById("voice");
-const photo=document.getElementById("photo");
 const msg=document.getElementById("msg");
 const noBtn=document.getElementById("noBtn");
+const photoBox=document.getElementById("photoBox");
 
 let started=false;
 let i=0;
 
 const noTexts=[
-"You're the best part of my day 🌸",
+"You’re the best part of my day 💕",
 "My heart chose you ❤️",
-"I promise to cherish us 💕",
+"I promise to cherish us 🌸",
 "I’ll wait for you ⏳",
-"We could be something beautiful ✨",
-"You’re worth everything 💎",
+"We could be beautiful together ✨",
 "I’m not giving up on us 💖"
 ];
 
-// first tap → music (mobile safe)
-document.body.addEventListener("click",()=>{
+// FIRST TOUCH → MUSIC (mobile safe)
+document.body.addEventListener("touchstart",()=>{
   if(!started){
     music.play();
     started=true;
     msg.innerText="Now choose with your heart 💗";
-    startHearts();
   }
-});
+},{once:true});
 
 function noClicked(){
   msg.innerText=noTexts[i % noTexts.length];
@@ -117,27 +116,14 @@ function noClicked(){
 
 function yesClicked(){
   music.pause();
-  msg.innerText="I love you Sneka ❤️";
-  photo.style.display="block";
+  msg.innerText="";
+  photoBox.style.display="flex";
   voice.play();
 
   voice.onended=()=>{
     window.location.href=
     "https://wa.me/917904090248?text=I%20said%20Yes%20💕%20i%20love%20you%20forever%20💍";
   };
-}
-
-// floating hearts generator
-function startHearts(){
-  setInterval(()=>{
-    const h=document.createElement("div");
-    h.className="heart";
-    h.innerText="💖";
-    h.style.left=Math.random()*100+"vw";
-    h.style.animationDuration=(4+Math.random()*3)+"s";
-    document.body.appendChild(h);
-    setTimeout(()=>h.remove(),6000);
-  },500);
 }
 </script>
 
