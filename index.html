@@ -1,102 +1,79 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="UTF-8">
-<title>❤️ For You</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<style>
-body{
-  margin:0;
-  height:100vh;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  background:linear-gradient(#ff9a9e,#fad0c4);
-  font-family:Arial, sans-serif;
-}
-
-.card{
-  background:#fff;
-  padding:30px;
-  border-radius:20px;
-  text-align:center;
-  width:90%;
-  max-width:350px;
-  box-shadow:0 10px 25px rgba(0,0,0,0.2);
-}
-
-h2{
-  color:#ff3366;
-}
-
-button{
-  margin-top:15px;
-  padding:12px 28px;
-  font-size:16px;
-  border:none;
-  border-radius:30px;
-  background:#ff3366;
-  color:#fff;
-  cursor:pointer;
-}
-
-button:hover{
-  background:#e62e5c;
-}
-
-img{
-  width:220px;
-  height:220px;
-  border-radius:50%;
-  object-fit:cover;
-  margin-top:15px;
-}
-</style>
+  <title>For You ❤️</title>
+  <style>
+    body {
+      text-align: center;
+      font-family: Arial;
+      background: pink;
+      overflow: hidden;
+    }
+    button {
+      font-size: 20px;
+      padding: 10px 25px;
+      margin: 10px;
+      cursor: pointer;
+    }
+    .heart {
+      position: fixed;
+      color: red;
+      font-size: 24px;
+      animation: fall 5s linear infinite;
+    }
+    @keyframes fall {
+      0% { top: -10%; }
+      100% { top: 110%; }
+    }
+  </style>
 </head>
 
 <body>
 
-<!-- AUDIO FILES -->
-<audio id="music" src="music.mp3"></audio>
+<h2>Will you be my Valentine? 💖</h2>
+
+<img src="her.jpg" width="250"><br><br>
+
+<button onclick="yesClicked()">YES ❤️</button>
+<button onmouseover="moveNo(this)">NO 😜</button>
+
+<audio id="song" src="music.mp3"></audio>
 <audio id="voice" src="voice.mp3"></audio>
 
-<div class="card" id="box">
-  <h2>Will you be my Valentine? ❤️</h2>
-  <button onclick="yesClick()">YES ❤️</button>
-</div>
-
 <script>
-function yesClick(){
+function yesClicked() {
+  document.getElementById("song").play();
 
-  const music = document.getElementById("music");
-  const voice = document.getElementById("voice");
-
-  // play song first
-  music.play();
-
-  // after 17 seconds → play voice
   setTimeout(() => {
-    voice.play();
+    document.getElementById("voice").play();
   }, 17000);
 
-  // change screen
-  document.getElementById("box").innerHTML = `
-    <h2>I Love You ❤️</h2>
-    <img src="her.jpg">
-    <p>You are my everything 💖</p>
-    <button onclick="share()">Send Love 💬</button>
-  `;
+  hearts();
+
+  setTimeout(() => {
+    window.location.href =
+      "https://wa.me/917904090248?text=I%20love%20you%20❤️😘";
+  }, 4000);
 }
 
-// WhatsApp auto message
-function share(){
-  const msg = encodeURIComponent(
-    "I love you ❤️\nThis is from my heart 💖"
-  );
-  window.open("https://wa.me/?text=" + msg, "_blank");
+function moveNo(btn) {
+  btn.style.position = "absolute";
+  btn.style.left = Math.random() * 80 + "%";
+  btn.style.top = Math.random() * 80 + "%";
+}
+
+function hearts() {
+  setInterval(() => {
+    let h = document.createElement("div");
+    h.className = "heart";
+    h.innerHTML = "❤️";
+    h.style.left = Math.random() * 100 + "%";
+    document.body.appendChild(h);
+    setTimeout(() => h.remove(), 5000);
+  }, 300);
 }
 </script>
 
 </body>
 </html>
+
