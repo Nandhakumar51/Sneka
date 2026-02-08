@@ -41,6 +41,7 @@
   #noBtn {
     background: #eee;
     position: relative;
+    transition: left 0.3s ease, top 0.3s ease;
   }
 
   #msg {
@@ -77,6 +78,11 @@
 
   audio {
     display: none;
+  }
+
+  /* Class to hide NO button */
+  .hidden {
+    display: none !important;
   }
 </style>
 </head>
@@ -120,19 +126,29 @@ const noTexts = [
 // FIRST TOUCH → MUSIC (mobile safe)
 document.body.addEventListener("touchstart", () => {
   if (!started) {
-    music.play();
+    music.play().catch(() => {});
     started = true;
     msg.innerText = "Now choose with your heart 💗";
   }
 }, { once: true });
 
 function noClicked() {
-  if (yesClickedFlag) return; // Disable NO button after YES clicked
+  if (yesClickedFlag) return; // Do nothing if YES clicked
+
   if (!started) {
-    music.play();
-    started = true;
-    msg.innerText = "Now choose with your heart 💗";
+    music.play().then(() => {
+      started = true;
+      msg.innerText = "Now choose with your heart 💗";
+      showNoMessage();
+    }).catch(() => {
+      showNoMessage();
+    });
+  } else {
+    showNoMessage();
   }
+}
+
+function showNoMessage() {
   msg.innerText = noTexts[i % noTexts.length];
   i++;
   noBtn.style.left = Math.random() * 120 + "px";
@@ -144,7 +160,7 @@ function yesClicked() {
   music.pause();
   msg.innerText = "";
   photoBox.style.display = "flex";
-  noBtn.style.display = "none"; // Hide NO button completely
+  noBtn.classList.add("hidden");  // Hide NO button completely
   voice.play();
 
   voice.onended = () => {
