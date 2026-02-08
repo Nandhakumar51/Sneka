@@ -254,17 +254,18 @@ startBtn.addEventListener("click", () => {
   });
 });
 
-// NO button click shakes
+// NO button click: show message immediately + shake
 noBtn.addEventListener("click", () => {
   if (yesClickedFlag) return;
 
+  // Update message instantly
   msg.innerText = noTexts[i % noTexts.length];
   i++;
 
+  // Restart shake animation
+  noBtn.classList.remove("shake");
+  void noBtn.offsetWidth;  // Trigger reflow to restart animation
   noBtn.classList.add("shake");
-  noBtn.addEventListener("animationend", () => {
-    noBtn.classList.remove("shake");
-  }, { once: true });
 });
 
 // NO button moves smoothly when hovered
