@@ -30,7 +30,7 @@
   #btnContainer {
     position: relative;
     margin-top: 20px;
-    width: 320px; /* enough width for buttons side by side */
+    width: 320px;
     height: 60px;
     display: flex;
     justify-content: center;
@@ -246,6 +246,7 @@ const noTexts = [
 // Start music and show yes/no buttons
 startBtn.addEventListener("click", () => {
   music.play().then(() => {
+    // SET initial message ONCE here ONLY!
     msg.innerText = "Now choose with your heart 💗";
     startBtn.style.display = "none";
     btnContainer.style.display = "flex";
@@ -254,17 +255,17 @@ startBtn.addEventListener("click", () => {
   });
 });
 
-// NO button click: show message immediately + shake
+// NO button click: instantly show popup, no resetting message
 noBtn.addEventListener("click", () => {
   if (yesClickedFlag) return;
 
-  // Update message instantly
+  // Update message immediately to the funny popup
   msg.innerText = noTexts[i % noTexts.length];
   i++;
 
-  // Restart shake animation
+  // Shake button animation restart
   noBtn.classList.remove("shake");
-  void noBtn.offsetWidth;  // Trigger reflow to restart animation
+  void noBtn.offsetWidth;  // trigger reflow
   noBtn.classList.add("shake");
 });
 
@@ -272,14 +273,14 @@ noBtn.addEventListener("click", () => {
 noBtn.addEventListener("mouseenter", () => {
   if (yesClickedFlag) return;
 
-  const padding = 20; // prevent going out of screen edges
+  const padding = 20;
   const maxX = window.innerWidth - noBtn.offsetWidth - padding;
   const maxY = window.innerHeight - noBtn.offsetHeight - padding;
 
   const newLeft = Math.random() * maxX;
   const newTop = Math.random() * maxY;
 
-  noBtn.style.position = "fixed";  // Fix position for free movement on screen
+  noBtn.style.position = "fixed";
   noBtn.style.left = `${newLeft}px`;
   noBtn.style.top = `${newTop}px`;
 });
