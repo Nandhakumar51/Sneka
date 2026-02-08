@@ -31,17 +31,28 @@
     border: none;
     border-radius: 8px;
     cursor: pointer;
+    transition: transform 0.3s ease;
+  }
+
+  button:hover {
+    transform: scale(1.1);
   }
 
   #yesBtn {
     background: #ff4d88;
     color: white;
+    animation: heartbeat 2s infinite;
   }
 
   #noBtn {
     background: #eee;
     position: relative;
-    transition: left 0.3s ease, top 0.3s ease;
+    transition: left 0.3s ease, top 0.3s ease, transform 0.3s ease;
+  }
+
+  @keyframes heartbeat {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.15); }
   }
 
   #msg {
@@ -59,6 +70,12 @@
     padding: 10px;
     max-width: 90vw;
     box-sizing: border-box;
+    opacity: 0;
+    transition: opacity 1s ease;
+  }
+
+  #photoBox.show {
+    opacity: 1;
   }
 
   #photo {
@@ -94,6 +111,11 @@
     border-radius: 10px;
     margin-top: 80px;
     cursor: pointer;
+    transition: transform 0.3s ease;
+  }
+
+  #startBtn:hover {
+    transform: scale(1.1);
   }
 </style>
 </head>
@@ -117,6 +139,9 @@
 <audio id="music" src="music.mpeg" loop></audio>
 <audio id="voice" src="voice.mpeg"></audio>
 
+<!-- Confetti script -->
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+
 <script>
 const music = document.getElementById("music");
 const voice = document.getElementById("voice");
@@ -138,7 +163,7 @@ const noTexts = [
   "I’m not giving up on us 💖"
 ];
 
-// When user clicks Start, play music and show YES/NO buttons
+// Start music and show buttons
 startBtn.addEventListener("click", () => {
   music.play().then(() => {
     msg.innerText = "Now choose with your heart 💗";
@@ -150,6 +175,7 @@ startBtn.addEventListener("click", () => {
   });
 });
 
+// NO button action
 function noClicked() {
   if (yesClickedFlag) return;
 
@@ -159,13 +185,27 @@ function noClicked() {
   noBtn.style.top = Math.random() * 80 + "px";
 }
 
+// YES button action
 function yesClicked() {
   yesClickedFlag = true;
   music.pause();
   msg.innerText = "";
   photoBox.style.display = "flex";
+
+  // Trigger fade-in
+  setTimeout(() => {
+    photoBox.classList.add("show");
+  }, 10);
+
   noBtn.classList.add("hidden");
   yesBtn.classList.add("hidden");
+
+  // Confetti burst
+  confetti({
+    particleCount: 150,
+    spread: 70,
+    origin: { y: 0.6 }
+  });
 
   voice.play();
 
