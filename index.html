@@ -2,42 +2,27 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
-<title>For Sneka ❤️</title>
-
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Valentine Start Button Test</title>
 <style>
-  html, body {
-    margin: 0; 
-    padding: 0; 
-    font-family: Arial, sans-serif;
+  body, html {
+    margin:0; padding:0; font-family: Arial, sans-serif;
     background: #ffc0cb;
+    display: flex; justify-content: center; align-items: center;
+    height: 100vh;
     text-align: center;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
   }
-
   #startScreen {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
   }
-
   #mainContent {
     display: none;
     flex-direction: column;
     align-items: center;
-    justify-content: flex-start;
   }
-
-  h2 {
-    margin-top: 30px;
-    color: #8b004f;
-  }
-
   button {
     padding: 12px 28px;
     font-size: 18px;
@@ -46,86 +31,27 @@
     border-radius: 8px;
     cursor: pointer;
   }
-
   #startBtn {
     background: #ff4d88;
     color: white;
   }
-
-  #yesBtn {
-    background: #ff4d88;
-    color: white;
-  }
-
-  #noBtn {
-    background: #eee;
-    position: relative;
-    transition: left 0.3s ease, top 0.3s ease;
-  }
-
-  #msg {
-    min-height: 50px;
-    font-size: 20px;
-    color: #7a003c;
-    margin-top: 10px;
-  }
-
-  #photoBox {
-    display: none;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    margin-top: 20px;
-    padding: 10px;
-    max-width: 90vw;
-    box-sizing: border-box;
-  }
-
-  #photo {
-    width: 100%;
-    max-width: 280px;
-    height: auto;
-    border-radius: 20px;
-    object-fit: cover;
-  }
-
-  #loveText {
-    font-size: 22px;
-    color: #b3005e;
-    margin-top: 10px;
-    word-wrap: break-word;
-  }
-
-  audio {
-    display: none;
-  }
-
-  .hidden {
-    display: none !important;
-  }
 </style>
 </head>
-
 <body>
 
-<!-- Start Screen -->
 <div id="startScreen">
   <h2>Welcome! Click Start to begin 💕</h2>
   <button id="startBtn">Start 🎵</button>
 </div>
 
-<!-- Main Content -->
 <div id="mainContent">
   <h2>Will you be my Valentine? ❤️</h2>
-
   <div id="msg">Now choose with your heart 💗</div>
-
   <button id="yesBtn">YES 💖</button>
   <button id="noBtn">NO 😅</button>
-
-  <div id="photoBox">
-    <img id="photo" src="her.jpeg" alt="Sneka's photo" />
-    <div id="loveText">I love you Sneka 💕</div>
+  <div id="photoBox" style="display:none; margin-top:20px;">
+    <img src="her.jpeg" alt="Sneka" style="width:280px; border-radius:20px;">
+    <div style="color:#b3005e; font-size:22px; margin-top:10px;">I love you Sneka 💕</div>
   </div>
 </div>
 
@@ -133,60 +59,55 @@
 <audio id="voice" src="voice.mpeg"></audio>
 
 <script>
-const startScreen = document.getElementById("startScreen");
-const startBtn = document.getElementById("startBtn");
-const mainContent = document.getElementById("mainContent");
-const music = document.getElementById("music");
-const voice = document.getElementById("voice");
-const msg = document.getElementById("msg");
-const noBtn = document.getElementById("noBtn");
-const yesBtn = document.getElementById("yesBtn");
-const photoBox = document.getElementById("photoBox");
+  const startScreen = document.getElementById("startScreen");
+  const mainContent = document.getElementById("mainContent");
+  const startBtn = document.getElementById("startBtn");
+  const music = document.getElementById("music");
+  const voice = document.getElementById("voice");
+  const msg = document.getElementById("msg");
+  const noBtn = document.getElementById("noBtn");
+  const yesBtn = document.getElementById("yesBtn");
+  const photoBox = document.getElementById("photoBox");
 
-let yesClickedFlag = false;
-let noClickIndex = 0;
+  let yesClickedFlag = false;
+  let noClickIndex = 0;
 
-const noTexts = [
-  "You’re the best part of my day 💕",
-  "My heart chose you ❤️",
-  "I promise to cherish us 🌸",
-  "I’ll wait for you ⏳",
-  "We could be beautiful together ✨",
-  "I’m not giving up on us 💖"
-];
+  const noTexts = [
+    "You’re the best part of my day 💕",
+    "My heart chose you ❤️",
+    "I promise to cherish us 🌸",
+    "I’ll wait for you ⏳",
+    "We could be beautiful together ✨",
+    "I’m not giving up on us 💖"
+  ];
 
-// Start button click handler
-startBtn.addEventListener("click", () => {
-  music.play().catch(() => {});
-  startScreen.style.display = "none";
-  mainContent.style.display = "flex";
-  msg.innerText = "Now choose with your heart 💗";
-});
+  startBtn.addEventListener("click", () => {
+    music.play().catch(() => {});
+    startScreen.style.display = "none";
+    mainContent.style.display = "flex";
+    msg.textContent = "Now choose with your heart 💗";
+  });
 
-// NO button click handler
-noBtn.addEventListener("click", () => {
-  if (yesClickedFlag) return; // no action after YES clicked
-  msg.innerText = noTexts[noClickIndex % noTexts.length];
-  noClickIndex++;
-  // Move NO button randomly within 120px left and 80px top
-  noBtn.style.left = Math.random() * 120 + "px";
-  noBtn.style.top = Math.random() * 80 + "px";
-});
+  noBtn.addEventListener("click", () => {
+    if (yesClickedFlag) return;
+    msg.textContent = noTexts[noClickIndex % noTexts.length];
+    noClickIndex++;
+    noBtn.style.position = "relative";
+    noBtn.style.left = Math.random() * 120 + "px";
+    noBtn.style.top = Math.random() * 80 + "px";
+  });
 
-// YES button click handler
-yesBtn.addEventListener("click", () => {
-  yesClickedFlag = true;
-  music.pause();
-  msg.innerText = "";
-  photoBox.style.display = "flex";
-  noBtn.classList.add("hidden");
-  voice.play();
-
-  voice.onended = () => {
-    window.location.href =
-      "https://wa.me/917904090248?text=I%20said%20Yes%20💕%20i%20love%20you%20forever%20💍";
-  };
-});
+  yesBtn.addEventListener("click", () => {
+    yesClickedFlag = true;
+    music.pause();
+    msg.textContent = "";
+    photoBox.style.display = "block";
+    noBtn.style.display = "none";
+    voice.play();
+    voice.onended = () => {
+      window.location.href = "https://wa.me/917904090248?text=I%20said%20Yes%20💕%20i%20love%20you%20forever%20💍";
+    };
+  });
 </script>
 
 </body>
