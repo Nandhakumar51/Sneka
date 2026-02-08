@@ -130,6 +130,12 @@
     box-shadow: 0 0 15px #ff6699;
     animation: sparkle 2.5s infinite;
     overflow: visible;
+
+    /* Floating animation */
+    animation-name: sparkle, floatImage;
+    animation-duration: 2.5s, 6s;
+    animation-iteration-count: infinite, infinite;
+    animation-timing-function: ease-in-out, ease-in-out;
   }
 
   #photoBox.show {
@@ -144,6 +150,9 @@
     object-fit: cover;
     position: relative;
     z-index: 20;
+
+    /* Also float the photo slightly */
+    animation: floatImage 6s ease-in-out infinite;
   }
 
   #loveText {
@@ -190,6 +199,22 @@
         0 0 30px #ff3399,
         0 0 40px #ff0077,
         0 0 50px #ff0055;
+    }
+  }
+
+  /* Floating image animation */
+  @keyframes floatImage {
+    0%, 100% {
+      transform: translate(0, 0);
+    }
+    25% {
+      transform: translate(8px, -6px);
+    }
+    50% {
+      transform: translate(-8px, 6px);
+    }
+    75% {
+      transform: translate(6px, -4px);
     }
   }
 </style>
@@ -253,7 +278,7 @@ startBtn.addEventListener("click", () => {
   });
 });
 
-// NO button click: instantly update popup message (NO button keeps shaking)
+// NO button click: instantly update popup message
 noBtn.addEventListener("click", () => {
   if (yesClickedFlag) return;
 
