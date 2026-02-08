@@ -78,28 +78,7 @@
     z-index: 10;
   }
 
-  #photoBox {
-    display: none;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    margin-top: 20px;
-    padding: 10px;
-    max-width: 90vw;
-    box-sizing: border-box;
-    opacity: 0;
-    transition: opacity 1s ease;
-    position: relative;
-    z-index: 20;
-    border-radius: 20px;
-    box-shadow: 0 0 15px #ff6699;
-    animation: sparkle 2.5s infinite;
-    overflow: visible;
-  }
 
-  #photoBox.show {
-    opacity: 1;
-  }
 
   #photo {
     width: 100%;
@@ -114,7 +93,16 @@
   #loveText {
     font-size: 22px;
     color: #b3005e;
-    margin-top: 10px;
+    margin-top: 10px#photoBox {
+  display: none;
+  opacity: 0;
+  transition: opacity 1s ease;
+  /* other styles */
+}
+
+#photoBox.show {
+  opacity: 1;
+};
     word-wrap: break-word;
     position: relative;
     z-index: 20;
@@ -231,15 +219,16 @@ function noClicked() {
 function yesClicked() {
   yesClickedFlag = true;
   music.pause();
-  msg.style.display = "none";  // Hide popup message after YES click
-  photoBox.style.display = "flex";
-
-  setTimeout(() => {
-    photoBox.classList.add("show");
-  }, 10);
-
+  msg.style.display = "none";  // Hide message
   noBtn.classList.add("hidden");
   yesBtn.classList.add("hidden");
+
+  photoBox.style.display = "flex";
+
+  // Trigger fade-in by adding 'show' class slightly after display flex
+  setTimeout(() => {
+    photoBox.classList.add("show");
+  }, 50);
 
   confetti({
     particleCount: 150,
@@ -257,4 +246,5 @@ function yesClicked() {
 </script>
 </body>
 </html>
+
 
