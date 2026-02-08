@@ -15,8 +15,22 @@
     min-height: 100vh;
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
+    justify-content: center;
     align-items: center;
+  }
+
+  #startScreen {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  #mainContent {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
   }
 
   h2 {
@@ -31,6 +45,11 @@
     border: none;
     border-radius: 8px;
     cursor: pointer;
+  }
+
+  #startBtn {
+    background: #ff4d88;
+    color: white;
   }
 
   #yesBtn {
@@ -48,6 +67,7 @@
     min-height: 50px;
     font-size: 20px;
     color: #7a003c;
+    margin-top: 10px;
   }
 
   #photoBox {
@@ -80,7 +100,6 @@
     display: none;
   }
 
-  /* Class to hide NO button */
   .hidden {
     display: none !important;
   }
@@ -88,31 +107,44 @@
 </head>
 
 <body>
-<h2>Will you be my Valentine? ❤️</h2>
 
-<div id="msg">Touch anywhere once 💕</div>
+<!-- Start Screen -->
+<div id="startScreen">
+  <h2>Welcome! Click Start to begin 💕</h2>
+  <button id="startBtn">Start 🎵</button>
+</div>
 
-<button id="yesBtn" onclick="yesClicked()">YES 💖</button>
-<button id="noBtn" onclick="noClicked()">NO 😅</button>
+<!-- Main Content -->
+<div id="mainContent">
+  <h2>Will you be my Valentine? ❤️</h2>
 
-<div id="photoBox">
-  <img id="photo" src="her.jpeg" alt="Sneka's photo" />
-  <div id="loveText">I love you Sneka 💕</div>
+  <div id="msg">Now choose with your heart 💗</div>
+
+  <button id="yesBtn">YES 💖</button>
+  <button id="noBtn">NO 😅</button>
+
+  <div id="photoBox">
+    <img id="photo" src="her.jpeg" alt="Sneka's photo" />
+    <div id="loveText">I love you Sneka 💕</div>
+  </div>
 </div>
 
 <audio id="music" src="music.mpeg" loop></audio>
 <audio id="voice" src="voice.mpeg"></audio>
 
 <script>
+const startScreen = document.getElementById("startScreen");
+const startBtn = document.getElementById("startBtn");
+const mainContent = document.getElementById("mainContent");
 const music = document.getElementById("music");
 const voice = document.getElementById("voice");
 const msg = document.getElementById("msg");
 const noBtn = document.getElementById("noBtn");
+const yesBtn = document.getElementById("yesBtn");
 const photoBox = document.getElementById("photoBox");
 
-let started = false;
-let i = 0;
 let yesClickedFlag = false;
+let noClickIndex = 0;
 
 const noTexts = [
   "You’re the best part of my day 💕",
@@ -123,56 +155,39 @@ const noTexts = [
   "I’m not giving up on us 💖"
 ];
 
-// FIRST TOUCH → MUSIC (mobile safe)
-document.body.addEventListener("touchstart", () => {
-  if (!started) {
-    music.play().catch(() => {});
-    started = true;
-    msg.innerText = "Now choose with your heart 💗";
-  }
-}, { once: true });
+// Start button click handler
+startBtn.addEventListener("click", () => {
+  music.play().catch(() => {});
+  startScreen.style.display = "none";
+  mainContent.style.display = "flex";
+  msg.innerText = "Now choose with your heart 💗";
+});
 
-function noClicked() {
-  if (yesClickedFlag) return; // Do nothing if YES clicked
-
-  if (!started) {
-    const playPromise = music.play();
-    if (playPromise !== undefined) {
-      playPromise.then(() => {
-        started = true;
-        msg.innerText = "Now choose with your heart 💗";
-        showNoMessage();
-      }).catch(() => {
-        showNoMessage();
-      });
-    } else {
-      showNoMessage();
-    }
-  } else {
-    showNoMessage();
-  }
-}
-
-function showNoMessage() {
-  msg.innerText = noTexts[i % noTexts.length];
-  i++;
+// NO button click handler
+noBtn.addEventListener("click", () => {
+  if (yesClickedFlag) return; // no action after YES clicked
+  msg.innerText = noTexts[noClickIndex % noTexts.length];
+  noClickIndex++;
+  // Move NO button randomly within 120px left and 80px top
   noBtn.style.left = Math.random() * 120 + "px";
   noBtn.style.top = Math.random() * 80 + "px";
-}
+});
 
-function yesClicked() {
+// YES button click handler
+yesBtn.addEventListener("click", () => {
   yesClickedFlag = true;
   music.pause();
   msg.innerText = "";
   photoBox.style.display = "flex";
-  noBtn.classList.add("hidden");  // Hide NO button completely
+  noBtn.classList.add("hidden");
   voice.play();
 
   voice.onended = () => {
     window.location.href =
       "https://wa.me/917904090248?text=I%20said%20Yes%20💕%20i%20love%20you%20forever%20💍";
   };
-}
+});
 </script>
+
 </body>
 </html>
