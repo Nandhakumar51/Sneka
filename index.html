@@ -12,7 +12,7 @@
     font-family: Arial, sans-serif;
     background: #ffc0cb;
     text-align: center;
-    min-height: 100vh; /* safer than height:100vh */
+    min-height: 100vh;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
@@ -56,7 +56,7 @@
     justify-content: center;
     margin-top: 20px;
     padding: 10px;
-    max-width: 90vw;   /* responsive */
+    max-width: 90vw;
     box-sizing: border-box;
   }
 
@@ -127,7 +127,12 @@ document.body.addEventListener("touchstart", () => {
 }, { once: true });
 
 function noClicked() {
-  if (yesClickedFlag) return;  // Disable NO button if YES clicked
+  if (yesClickedFlag) return; // Disable NO button after YES clicked
+  if (!started) {
+    music.play();
+    started = true;
+    msg.innerText = "Now choose with your heart 💗";
+  }
   msg.innerText = noTexts[i % noTexts.length];
   i++;
   noBtn.style.left = Math.random() * 120 + "px";
@@ -135,10 +140,11 @@ function noClicked() {
 }
 
 function yesClicked() {
-  yesClickedFlag = true;       // Set flag to disable NO button effects
+  yesClickedFlag = true;
   music.pause();
   msg.innerText = "";
   photoBox.style.display = "flex";
+  noBtn.style.display = "none"; // Hide NO button completely
   voice.play();
 
   voice.onended = () => {
