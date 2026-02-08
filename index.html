@@ -47,6 +47,7 @@
     cursor: pointer;
     transition: transform 0.3s ease;
     user-select: none;
+    position: relative;
   }
 
   button:hover {
@@ -57,7 +58,6 @@
     background: #ff4d88;
     color: white;
     animation: heartbeat 2s infinite;
-    position: relative;
     z-index: 11;
   }
 
@@ -65,12 +65,13 @@
     background: #ff77aa;
     color: white;
     font-weight: bold;
-    position: relative;
     border-radius: 12px;
     font-size: 20px;
     box-shadow: 0 4px 8px rgba(255, 20, 147, 0.6);
-    transition: transform 0.3s ease;
     z-index: 11;
+
+    /* Continuous gentle shake animation */
+    animation: gentleShake 3s infinite ease-in-out;
   }
 
   #noBtn:hover {
@@ -83,14 +84,12 @@
     50% { transform: scale(1.15); }
   }
 
-  @keyframes shake {
-    0%, 100% { transform: translateX(0); }
-    20%, 60% { transform: translateX(-8px); }
-    40%, 80% { transform: translateX(8px); }
-  }
-
-  .shake {
-    animation: shake 0.5s ease;
+  /* Gentle continuous shake */
+  @keyframes gentleShake {
+    0%, 100% { transform: translate(0, 0) rotate(0deg); }
+    25% { transform: translate(4px, -3px) rotate(-3deg); }
+    50% { transform: translate(-4px, 3px) rotate(3deg); }
+    75% { transform: translate(3px, -2px) rotate(-2deg); }
   }
 
   #msg {
@@ -246,7 +245,6 @@ const noTexts = [
 // Start music and show yes/no buttons
 startBtn.addEventListener("click", () => {
   music.play().then(() => {
-    // SET initial message ONCE here ONLY!
     msg.innerText = "Now choose with your heart 💗";
     startBtn.style.display = "none";
     btnContainer.style.display = "flex";
@@ -255,36 +253,15 @@ startBtn.addEventListener("click", () => {
   });
 });
 
-// NO button click: instantly show popup, no resetting message
+// NO button click: instantly update popup message (NO button keeps shaking)
 noBtn.addEventListener("click", () => {
   if (yesClickedFlag) return;
 
-  // Update message immediately to the funny popup
   msg.innerText = noTexts[i % noTexts.length];
   i++;
-
-  // Shake button animation restart
-  noBtn.classList.remove("shake");
-  void noBtn.offsetWidth;  // trigger reflow
-  noBtn.classList.add("shake");
 });
 
-// NO button moves smoothly when hovered
-noBtn.addEventListener("mouseenter", () => {
-  if (yesClickedFlag) return;
-
-  const padding = 20;
-  const maxX = window.innerWidth - noBtn.offsetWidth - padding;
-  const maxY = window.innerHeight - noBtn.offsetHeight - padding;
-
-  const newLeft = Math.random() * maxX;
-  const newTop = Math.random() * maxY;
-
-  noBtn.style.position = "fixed";
-  noBtn.style.left = `${newLeft}px`;
-  noBtn.style.top = `${newTop}px`;
-});
-
+// YES button click
 function yesClicked() {
   yesClickedFlag = true;
   music.pause();
@@ -292,7 +269,6 @@ function yesClicked() {
   btnContainer.style.display = "none";
 
   photoBox.style.display = "flex";
-
   setTimeout(() => {
     photoBox.classList.add("show");
   }, 50);
