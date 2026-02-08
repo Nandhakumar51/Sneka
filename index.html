@@ -60,13 +60,20 @@
     50% { transform: scale(1.15); }
   }
 
-  #msg {
-    min-height: 50px;
-    font-size: 20px;
-    color: #7a003c;
-    position: relative;
-    z-index: 10;
-  }
+#msg {
+  min-height: 70px;          /* Increase height */
+  font-size: 24px;           /* Bigger font */
+  font-weight: bold;         /* Bold text */
+  color: #b3005e;            /* Darker pink/purple color */
+  background: #ffe0f0;       /* Light pink background */
+  border: 2px solid #ff4d88;/* Pink border */
+  border-radius: 12px;       /* Rounded corners */
+  padding: 10px 20px;        /* Some padding */
+  margin: 20px auto;         /* Center with margin */
+  max-width: 90vw;           /* Responsive max width */
+  box-sizing: border-box;    /* Include padding in width */
+  transition: background-color 0.3s ease;
+}
 
   #photoBox {
     display: none;
@@ -362,4 +369,5 @@ function yesClicked() {
 
 </body>
 </html>
+
 
