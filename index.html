@@ -27,16 +27,26 @@
     z-index: 10;
   }
 
+  #btnContainer {
+    position: relative;
+    margin-top: 20px;
+    width: 320px; /* enough width for buttons side by side */
+    height: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    z-index: 10;
+  }
+
   button {
     padding: 12px 28px;
     font-size: 18px;
-    margin: 10px;
     border: none;
     border-radius: 8px;
     cursor: pointer;
     transition: transform 0.3s ease;
-    position: relative;
-    z-index: 10;
+    user-select: none;
   }
 
   button:hover {
@@ -47,46 +57,20 @@
     background: #ff4d88;
     color: white;
     animation: heartbeat 2s infinite;
-  }
-
-  /* Styled popup message - big, bold, colorful */
-  #msg {
-    min-height: 90px;
-    font-size: 28px;
-    font-weight: 700;
-    color: #d1006c;
-    background: linear-gradient(135deg, #ffb6c1 0%, #ff69b4 100%);
-    border: 3px solid #ff1493;
-    border-radius: 16px;
-    padding: 20px 30px;
-    margin: 25px auto;
-    max-width: 90vw;
-    box-sizing: border-box;
-    text-shadow: 1px 1px 2px #900048;
-    box-shadow: 0 0 20px #ff69b4;
-    user-select: none;
     position: relative;
-    z-index: 10;
-    transition: background-color 0.3s ease;
-    line-height: 1.3;
+    z-index: 11;
   }
 
-  /* NO button - visible, moves around */
   #noBtn {
     background: #ff77aa;
     color: white;
     font-weight: bold;
-    position: absolute; /* can move anywhere */
-    top: 200px; /* starting position */
-    left: calc(50% + 60px);
+    position: relative;
     border-radius: 12px;
-    padding: 12px 28px;
     font-size: 20px;
-    cursor: pointer;
-    transition: transform 0.3s ease, left 0.4s ease, top 0.4s ease;
     box-shadow: 0 4px 8px rgba(255, 20, 147, 0.6);
-    user-select: none;
-    z-index: 15;
+    transition: transform 0.3s ease;
+    z-index: 11;
   }
 
   #noBtn:hover {
@@ -107,6 +91,27 @@
 
   .shake {
     animation: shake 0.5s ease;
+  }
+
+  #msg {
+    min-height: 90px;
+    font-size: 28px;
+    font-weight: 700;
+    color: #d1006c;
+    background: linear-gradient(135deg, #ffb6c1 0%, #ff69b4 100%);
+    border: 3px solid #ff1493;
+    border-radius: 16px;
+    padding: 20px 30px;
+    margin: 25px auto;
+    max-width: 90vw;
+    box-sizing: border-box;
+    text-shadow: 1px 1px 2px #900048;
+    box-shadow: 0 0 20px #ff69b4;
+    user-select: none;
+    position: relative;
+    z-index: 10;
+    transition: background-color 0.3s ease;
+    line-height: 1.3;
   }
 
   #photoBox {
@@ -193,14 +198,16 @@
 
 <body>
 
-<h2>Will you be Marry Me 💍🥰? ❤️</h2>
+<h2>Will you be my Valentine? ❤️</h2>
 
 <div id="msg">Click Start to play music 💕</div>
 
 <button id="startBtn">Start Music 🎵</button>
 
-<button id="yesBtn" onclick="yesClicked()" style="display:none;">YES 💖</button>
-<button id="noBtn" style="display:none;">NO 😅</button>
+<div id="btnContainer" style="display:none;">
+  <button id="yesBtn" onclick="yesClicked()">YES 💖</button>
+  <button id="noBtn">NO 😅</button>
+</div>
 
 <div id="photoBox">
   <img id="photo" src="her.jpeg" alt="Sneka's photo" />
@@ -218,6 +225,7 @@ const voice = document.getElementById("voice");
 const msg = document.getElementById("msg");
 const noBtn = document.getElementById("noBtn");
 const yesBtn = document.getElementById("yesBtn");
+const btnContainer = document.getElementById("btnContainer");
 const photoBox = document.getElementById("photoBox");
 const startBtn = document.getElementById("startBtn");
 
@@ -240,12 +248,7 @@ startBtn.addEventListener("click", () => {
   music.play().then(() => {
     msg.innerText = "Now choose with your heart 💗";
     startBtn.style.display = "none";
-    yesBtn.style.display = "inline-block";
-    noBtn.style.display = "inline-block";
-
-    // Reset NO button to starting position
-    noBtn.style.top = "200px";
-    noBtn.style.left = "calc(50% + 60px)";
+    btnContainer.style.display = "flex";
   }).catch(() => {
     alert("Please allow sound playback.");
   });
@@ -275,6 +278,7 @@ noBtn.addEventListener("mouseenter", () => {
   const newLeft = Math.random() * maxX;
   const newTop = Math.random() * maxY;
 
+  noBtn.style.position = "fixed";  // Fix position for free movement on screen
   noBtn.style.left = `${newLeft}px`;
   noBtn.style.top = `${newTop}px`;
 });
@@ -283,17 +287,7 @@ function yesClicked() {
   yesClickedFlag = true;
   music.pause();
   msg.style.display = "none";
-
-  noBtn.style.position = "relative"; // reset to normal so it doesn't block photo
-  noBtn.style.left = "auto";
-  noBtn.style.top = "auto";
-
-  noBtn.classList.remove("shake");
-  // do not hide noBtn — keep visible but disabled (optional)
-  noBtn.style.pointerEvents = "none";
-  noBtn.style.opacity = "0.6";
-
-  yesBtn.classList.add("hidden");
+  btnContainer.style.display = "none";
 
   photoBox.style.display = "flex";
 
