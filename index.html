@@ -60,20 +60,23 @@
     50% { transform: scale(1.15); }
   }
 
-#msg {
-  min-height: 70px;          /* Increase height */
-  font-size: 24px;           /* Bigger font */
-  font-weight: bold;         /* Bold text */
-  color: #b3005e;            /* Darker pink/purple color */
-  background: #ffe0f0;       /* Light pink background */
-  border: 2px solid #ff4d88;/* Pink border */
-  border-radius: 12px;       /* Rounded corners */
-  padding: 10px 20px;        /* Some padding */
-  margin: 20px auto;         /* Center with margin */
-  max-width: 90vw;           /* Responsive max width */
-  box-sizing: border-box;    /* Include padding in width */
-  transition: background-color 0.3s ease;
-}
+  /* Styled popup message */
+  #msg {
+    min-height: 70px;
+    font-size: 24px;
+    font-weight: bold;
+    color: #b3005e;
+    background: #ffe0f0;
+    border: 2px solid #ff4d88;
+    border-radius: 12px;
+    padding: 10px 20px;
+    margin: 20px auto;
+    max-width: 90vw;
+    box-sizing: border-box;
+    transition: background-color 0.3s ease;
+    position: relative;
+    z-index: 10;
+  }
 
   #photoBox {
     display: none;
@@ -142,7 +145,6 @@
     transform: scale(1.1);
   }
 
-  /* Sparkle Animation on photo box */
   @keyframes sparkle {
     0%, 100% {
       box-shadow:
@@ -157,69 +159,6 @@
         0 0 30px #ff3399,
         0 0 40px #ff0077,
         0 0 50px #ff0055;
-    }
-  }
-
-  /* Container for heart rain over photo */
-  #heartRainContainer {
-    position: absolute;
-    top: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 280px;
-    height: 320px;
-    pointer-events: none;
-    overflow: visible;
-    z-index: 25;
-  }
-
-  /* Floating hearts general style */
-  .floating-heart {
-    position: fixed;
-    bottom: -50px;
-    font-size: 24px;
-    color: #ff4d88;
-    user-select: none;
-    pointer-events: none;
-    animation-timing-function: linear;
-    z-index: 5;
-    opacity: 0.8;
-    filter: drop-shadow(0 0 2px #b3005e);
-  }
-
-  /* Animate individual hearts */
-  @keyframes floatUp {
-    0% {
-      transform: translateY(0) scale(1);
-      opacity: 0.8;
-    }
-    100% {
-      transform: translateY(-110vh) scale(1.2);
-      opacity: 0;
-    }
-  }
-
-  /* Heart rain style */
-  .heart-rain {
-    position: absolute;
-    top: 0;
-    font-size: 16px;
-    color: #ff66bb;
-    user-select: none;
-    pointer-events: none;
-    animation-name: heartRainFall;
-    animation-timing-function: linear;
-    opacity: 0.9;
-  }
-
-  @keyframes heartRainFall {
-    0% {
-      transform: translateY(-30px) rotate(0deg);
-      opacity: 1;
-    }
-    100% {
-      transform: translateY(320px) rotate(360deg);
-      opacity: 0;
     }
   }
 </style>
@@ -239,7 +178,6 @@
 <div id="photoBox">
   <img id="photo" src="her.jpeg" alt="Sneka's photo" />
   <div id="loveText">I love you Sneka 💕</div>
-  <div id="heartRainContainer"></div>
 </div>
 
 <audio id="music" src="music.mpeg" loop></audio>
@@ -255,7 +193,6 @@ const noBtn = document.getElementById("noBtn");
 const yesBtn = document.getElementById("yesBtn");
 const photoBox = document.getElementById("photoBox");
 const startBtn = document.getElementById("startBtn");
-const heartRainContainer = document.getElementById("heartRainContainer");
 
 let i = 0;
 let yesClickedFlag = false;
@@ -268,10 +205,9 @@ const noTexts = [
   "I’ll bring chocolates next time! 🍫",
   "Come on, don’t break my heart 💔",
   "No way! You’re stuck with me 😎",
-  "You + Me = Forever. Just say YES! 💞",
+  "You + Me = Forever. Just say YES! 💞"
 ];
 
-// Start music and show buttons
 startBtn.addEventListener("click", () => {
   music.play().then(() => {
     msg.innerText = "Now choose with your heart 💗";
@@ -292,57 +228,10 @@ function noClicked() {
   noBtn.style.top = Math.random() * 80 + "px";
 }
 
-// Create floating hearts continuously
-function createFloatingHeart() {
-  const heart = document.createElement("div");
-  heart.classList.add("floating-heart");
-  heart.style.left = Math.random() * 100 + "vw";
-  heart.style.fontSize = (12 + Math.random() * 20) + "px";
-  heart.style.animationDuration = (4 + Math.random() * 4) + "s";
-  heart.style.opacity = 0.7 + Math.random() * 0.3;
-  heart.textContent = "💕";
-
-  document.body.appendChild(heart);
-
-  heart.style.animationName = "floatUp";
-
-  heart.addEventListener("animationend", () => {
-    heart.remove();
-  });
-}
-
-// Heart rain over photo
-function createHeartRain() {
-  const heart = document.createElement("div");
-  heart.classList.add("heart-rain");
-  heart.style.left = Math.random() * 280 + "px";
-  heart.style.animationDuration = (3 + Math.random() * 3) + "s";
-  heart.style.fontSize = (10 + Math.random() * 12) + "px";
-  heart.textContent = "❤️";
-
-  heartRainContainer.appendChild(heart);
-
-  heart.addEventListener("animationend", () => {
-    heart.remove();
-  });
-}
-
-// Launch floating hearts every 500ms
-setInterval(() => {
-  createFloatingHeart();
-}, 500);
-
-// Launch heart rain every 400ms (only when photo visible)
-setInterval(() => {
-  if(photoBox.style.display === "flex") {
-    createHeartRain();
-  }
-}, 400);
-
 function yesClicked() {
   yesClickedFlag = true;
   music.pause();
-  msg.innerText = "";
+  msg.style.display = "none";  // Hide popup message after YES click
   photoBox.style.display = "flex";
 
   setTimeout(() => {
@@ -366,8 +255,5 @@ function yesClicked() {
   };
 }
 </script>
-
 </body>
 </html>
-
-
