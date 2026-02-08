@@ -97,12 +97,10 @@
     display: none;
   }
 
-  /* Class to hide NO button */
   .hidden {
     display: none !important;
   }
 
-  /* Start button style */
   #startBtn {
     background: #ff4d88;
     color: white;
@@ -139,7 +137,6 @@
 <audio id="music" src="music.mpeg" loop></audio>
 <audio id="voice" src="voice.mpeg"></audio>
 
-<!-- Confetti script -->
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
 
 <script>
@@ -163,7 +160,6 @@ const noTexts = [
   "I’m not giving up on us 💖"
 ];
 
-// Start music and show buttons
 startBtn.addEventListener("click", () => {
   music.play().then(() => {
     msg.innerText = "Now choose with your heart 💗";
@@ -175,7 +171,6 @@ startBtn.addEventListener("click", () => {
   });
 });
 
-// NO button action
 function noClicked() {
   if (yesClickedFlag) return;
 
@@ -185,14 +180,12 @@ function noClicked() {
   noBtn.style.top = Math.random() * 80 + "px";
 }
 
-// YES button action
 function yesClicked() {
   yesClickedFlag = true;
   music.pause();
   msg.innerText = "";
   photoBox.style.display = "flex";
 
-  // Trigger fade-in
   setTimeout(() => {
     photoBox.classList.add("show");
   }, 10);
@@ -200,7 +193,6 @@ function yesClicked() {
   noBtn.classList.add("hidden");
   yesBtn.classList.add("hidden");
 
-  // Confetti burst
   confetti({
     particleCount: 150,
     spread: 70,
