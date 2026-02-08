@@ -136,13 +136,18 @@ function noClicked() {
   if (yesClickedFlag) return; // Do nothing if YES clicked
 
   if (!started) {
-    music.play().then(() => {
-      started = true;
-      msg.innerText = "Now choose with your heart 💗";
+    const playPromise = music.play();
+    if (playPromise !== undefined) {
+      playPromise.then(() => {
+        started = true;
+        msg.innerText = "Now choose with your heart 💗";
+        showNoMessage();
+      }).catch(() => {
+        showNoMessage();
+      });
+    } else {
       showNoMessage();
-    }).catch(() => {
-      showNoMessage();
-    });
+    }
   } else {
     showNoMessage();
   }
