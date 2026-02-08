@@ -1,69 +1,87 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta charset="UTF-8">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
 <title>For Sneka ❤️</title>
 
 <style>
-body{
-  background:#ffc0cb;
-  font-family:Arial,sans-serif;
-  text-align:center;
-  margin:0;
-  height:100vh;
-  display:flex;
-  flex-direction:column;
-  justify-content:flex-start;
-  align-items:center;
-}
+  html, body {
+    margin: 0; 
+    padding: 0; 
+    font-family: Arial, sans-serif;
+    background: #ffc0cb;
+    text-align: center;
+    min-height: 100vh; /* safer than height:100vh */
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+  }
 
-h2{
-  margin-top:30px;
-  color:#8b004f;
-}
+  h2 {
+    margin-top: 30px;
+    color: #8b004f;
+  }
 
-button{
-  padding:12px 28px;
-  font-size:18px;
-  margin:10px;
-  border:none;
-  border-radius:8px;
-}
+  button {
+    padding: 12px 28px;
+    font-size: 18px;
+    margin: 10px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+  }
 
-#yesBtn{background:#ff4d88;color:white;}
-#noBtn{background:#eee;position:relative;}
+  #yesBtn {
+    background: #ff4d88;
+    color: white;
+  }
 
-#msg{
-  min-height:50px;
-  font-size:20px;
-  color:#7a003c;
-}
+  #noBtn {
+    background: #eee;
+    position: relative;
+  }
 
-#photoBox{
-  display:none;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  margin-top:20px;
-}
+  #msg {
+    min-height: 50px;
+    font-size: 20px;
+    color: #7a003c;
+  }
 
-#photo{
-  width:280px;
-  border-radius:20px;
-}
+  #photoBox {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 20px;
+    padding: 10px;
+    max-width: 90vw;   /* responsive */
+    box-sizing: border-box;
+  }
 
-#loveText{
-  font-size:22px;
-  color:#b3005e;
-  margin-top:10px;
-}
+  #photo {
+    width: 100%;
+    max-width: 280px;
+    height: auto;
+    border-radius: 20px;
+    object-fit: cover;
+  }
 
-audio{display:none;}
+  #loveText {
+    font-size: 22px;
+    color: #b3005e;
+    margin-top: 10px;
+    word-wrap: break-word;
+  }
+
+  audio {
+    display: none;
+  }
 </style>
 </head>
 
 <body>
-
 <h2>Will you be my Valentine? ❤️</h2>
 
 <div id="msg">Touch anywhere once 💕</div>
@@ -72,7 +90,7 @@ audio{display:none;}
 <button id="noBtn" onclick="noClicked()">NO 😅</button>
 
 <div id="photoBox">
-  <img id="photo" src="her.jpeg">
+  <img id="photo" src="her.jpeg" alt="Sneka's photo" />
   <div id="loveText">I love you Sneka 💕</div>
 </div>
 
@@ -80,52 +98,54 @@ audio{display:none;}
 <audio id="voice" src="voice.mpeg"></audio>
 
 <script>
-const music=document.getElementById("music");
-const voice=document.getElementById("voice");
-const msg=document.getElementById("msg");
-const noBtn=document.getElementById("noBtn");
-const photoBox=document.getElementById("photoBox");
+const music = document.getElementById("music");
+const voice = document.getElementById("voice");
+const msg = document.getElementById("msg");
+const noBtn = document.getElementById("noBtn");
+const photoBox = document.getElementById("photoBox");
 
-let started=false;
-let i=0;
+let started = false;
+let i = 0;
+let yesClickedFlag = false;
 
-const noTexts=[
-"You’re the best part of my day 💕",
-"My heart chose you ❤️",
-"I promise to cherish us 🌸",
-"I’ll wait for you ⏳",
-"We could be beautiful together ✨",
-"I’m not giving up on us 💖"
+const noTexts = [
+  "You’re the best part of my day 💕",
+  "My heart chose you ❤️",
+  "I promise to cherish us 🌸",
+  "I’ll wait for you ⏳",
+  "We could be beautiful together ✨",
+  "I’m not giving up on us 💖"
 ];
 
 // FIRST TOUCH → MUSIC (mobile safe)
-document.body.addEventListener("touchstart",()=>{
-  if(!started){
+document.body.addEventListener("touchstart", () => {
+  if (!started) {
     music.play();
-    started=true;
-    msg.innerText="Now choose with your heart 💗";
+    started = true;
+    msg.innerText = "Now choose with your heart 💗";
   }
-},{once:true});
+}, { once: true });
 
-function noClicked(){
-  msg.innerText=noTexts[i % noTexts.length];
+function noClicked() {
+  if (yesClickedFlag) return;  // Disable NO button if YES clicked
+  msg.innerText = noTexts[i % noTexts.length];
   i++;
-  noBtn.style.left=Math.random()*120+"px";
-  noBtn.style.top=Math.random()*80+"px";
+  noBtn.style.left = Math.random() * 120 + "px";
+  noBtn.style.top = Math.random() * 80 + "px";
 }
 
-function yesClicked(){
+function yesClicked() {
+  yesClickedFlag = true;       // Set flag to disable NO button effects
   music.pause();
-  msg.innerText="";
-  photoBox.style.display="flex";
+  msg.innerText = "";
+  photoBox.style.display = "flex";
   voice.play();
 
-  voice.onended=()=>{
-    window.location.href=
-    "https://wa.me/917904090248?text=I%20said%20Yes%20💕%20i%20love%20you%20forever%20💍";
+  voice.onended = () => {
+    window.location.href =
+      "https://wa.me/917904090248?text=I%20said%20Yes%20💕%20i%20love%20you%20forever%20💍";
   };
 }
 </script>
-
 </body>
 </html>
