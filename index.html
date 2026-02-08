@@ -49,15 +49,27 @@
     animation: heartbeat 2s infinite;
   }
 
+  /* Updated NO button styles */
   #noBtn {
     background: #eee;
     position: relative;
-    transition: left 0.3s ease, top 0.3s ease, transform 0.3s ease;
+    transition: transform 0.2s ease, left 0.3s ease, top 0.3s ease;
+    cursor: pointer;
   }
 
   @keyframes heartbeat {
     0%, 100% { transform: scale(1); }
     50% { transform: scale(1.15); }
+  }
+
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    20%, 60% { transform: translateX(-8px); }
+    40%, 80% { transform: translateX(8px); }
+  }
+
+  .shake {
+    animation: shake 0.5s ease;
   }
 
   /* Styled popup message */
@@ -173,7 +185,7 @@
 <button id="startBtn">Start Music 🎵</button>
 
 <button id="yesBtn" onclick="yesClicked()" style="display:none;">YES 💖</button>
-<button id="noBtn" onclick="noClicked()" style="display:none;">NO 😅</button>
+<button id="noBtn" style="display:none;">NO 😅</button>
 
 <div id="photoBox">
   <img id="photo" src="her.jpeg" alt="Sneka's photo" />
@@ -208,6 +220,7 @@ const noTexts = [
   "You + Me = Forever. Just say YES! 💞"
 ];
 
+// Start music and show yes/no buttons
 startBtn.addEventListener("click", () => {
   music.play().then(() => {
     msg.innerText = "Now choose with your heart 💗";
@@ -219,26 +232,43 @@ startBtn.addEventListener("click", () => {
   });
 });
 
-function noClicked() {
+// NO button click shakes
+noBtn.addEventListener("click", () => {
   if (yesClickedFlag) return;
 
   msg.innerText = noTexts[i % noTexts.length];
   i++;
-  noBtn.style.left = Math.random() * 120 + "px";
-  noBtn.style.top = Math.random() * 80 + "px";
-}
+
+  noBtn.classList.add("shake");
+  noBtn.addEventListener("animationend", () => {
+    noBtn.classList.remove("shake");
+  }, { once: true });
+});
+
+// NO button dodges on hover
+noBtn.addEventListener("mouseenter", () => {
+  if (yesClickedFlag) return;
+
+  const maxX = window.innerWidth - noBtn.offsetWidth - 20; // padding
+  const maxY = window.innerHeight - noBtn.offsetHeight - 20;
+
+  const newLeft = Math.random() * maxX;
+  const newTop = Math.random() * maxY;
+
+  noBtn.style.left = `${newLeft}px`;
+  noBtn.style.top = `${newTop}px`;
+});
 
 function yesClicked() {
   yesClickedFlag = true;
   music.pause();
-  msg.style.display = "none";  // Hide the message box
+  msg.style.display = "none";
 
   noBtn.classList.add("hidden");
   yesBtn.classList.add("hidden");
 
   photoBox.style.display = "flex";
 
-  // Add 'show' class to trigger fade-in transition
   setTimeout(() => {
     photoBox.classList.add("show");
   }, 50);
