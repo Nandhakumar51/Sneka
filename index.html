@@ -31,18 +31,16 @@
     position: relative;
   }
 
-  /* Canvas full screen behind everything */
   #heartCanvas {
     position: fixed;
     top: 0;
     left: 0;
     width: 100vw;
     height: 100vh;
-    pointer-events: none; /* so clicks pass through */
+    pointer-events: none;
     z-index: 1;
   }
 
-  /* Main content above canvas */
   #mainContent {
     position: relative;
     z-index: 10;
@@ -53,7 +51,6 @@
   h2 {
     margin-top: 30px;
     color: #8b004f;
-    z-index: 10;
   }
 
   #btnContainer {
@@ -177,7 +174,6 @@
     animation: floatImage 6s ease-in-out infinite;
   }
 
-  /* UPDATED LOVE TEXT STYLE */
   #loveText {
     font-family: 'Comic Neue', cursive;
     font-weight: 700;
@@ -260,7 +256,7 @@
 <canvas id="heartCanvas"></canvas>
 
 <div id="mainContent">
-  <h2>Will you be Marry Me💍🥰? ❤️</h2>
+  <h2>Will you be my Valentine? ❤️</h2>
 
   <div id="msg">Click Start to play music 💕</div>
 
@@ -273,14 +269,12 @@
 
   <div id="photoBox">
     <img id="photo" src="her.jpeg" alt="Sneka's photo" />
-    <div id="loveText">I love you Sneka💍🫂👩‍❤️‍💋‍👨💕</div>
+    <div id="loveText">I love you Sneka 💕</div>
   </div>
 </div>
 
 <audio id="music" src="music.mpeg" loop></audio>
 <audio id="voice" src="voice.mpeg"></audio>
-
-<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
 
 <script>
 const music = document.getElementById("music");
@@ -337,15 +331,10 @@ function yesClicked() {
     photoBox.classList.add("show");
   }, 50);
 
-  confetti({
-    particleCount: 150,
-    spread: 70,
-    origin: { y: 0.6 }
-  });
-
   voice.play();
 
   voice.onended = () => {
+    // WhatsApp pre-filled message URL encoded
     window.location.href =
       "https://wa.me/917904090248?text=I%20said%20Yes%20%F0%9F%92%95%20i%20love%20you%20forever%20%F0%9F%92%8D";
   };
@@ -379,7 +368,7 @@ class Heart {
     this.opacity = randomRange(0.4, 1);
     this.angle = Math.random() * Math.PI * 2;
     this.angularSpeed = randomRange(0.01, 0.03);
-    this.colorHue = Math.floor(randomRange(320, 350)); // pink-red hues
+    this.colorHue = Math.floor(randomRange(320, 350));
   }
 
   draw() {
@@ -444,5 +433,3 @@ animate();
 </script>
 </body>
 </html>
-
-
